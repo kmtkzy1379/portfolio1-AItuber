@@ -1,4 +1,4 @@
-AI Assistant Applicationは、Google Gemini APIとVOICEVOX音声合成、VTube Studio（Live2D）連携を統合したYouTubeコメント監視型のAIアシスタントです。リアルタイムでYouTubeライブコメントを監視し、音声とLive2Dアバターで応答する対話型システムです。
+AI Assistant Applicationは、Google Gemini APIとVOICEVOX音声合成、VTube Studio（Live2D）連携を統合したYouTubeコメント監視型のAIアシスタントです。リアルタイムでYouTubeライブコメントを監視し、音声とLive2Dアバターで応答する対話型システムです。このAIシステムは自由エネルギ原理（FEP）を基に設計されており、意識形成理論を取り入れたAIの挙動を観察する実験的アプリケーションです。
 
 ## ✨ 主な機能
 
