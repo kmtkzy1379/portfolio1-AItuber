@@ -45,8 +45,8 @@ prompt/
 
 1. **リポジトリのクローン**
     ```bash
-    git clone <repository-url>
-    cd ai-assistant-app
+    git clone <https://github.com/kmtkzy1379/portfolio1-AItuber.git>
+    cd portfolio1-AItuber
     ```
 
 2. **仮想環境の作成とアクティベート**
