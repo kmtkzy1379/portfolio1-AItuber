@@ -94,9 +94,9 @@ def save_auth_token(token):
 async def authenticate(websocket):
     """接続と認証処理"""
     print("認証処理を開始します...")
-    
+   
     token = load_auth_token()
-    
+   
     if not token:
         # トークンがなければ新規取得
         request_data = {
@@ -104,7 +104,7 @@ async def authenticate(websocket):
             "pluginDeveloper": PLUGIN_DEVELOPER
         }
         response = await send_request(websocket, "AuthenticationTokenRequest", request_data)
-        
+       
         if response and response.get("messageType") == "AuthenticationTokenResponse":
             new_token = response["data"]["authenticationToken"]
             save_auth_token(new_token)
@@ -122,7 +122,7 @@ async def authenticate(websocket):
         "authenticationToken": token
     }
     response = await send_request(websocket, "AuthenticationRequest", request_data)
-    
+   
     if response and response.get("messageType") == "AuthenticationResponse" and response["data"].get("authenticated"):
         print("認証に成功しました！")
         return True
@@ -252,7 +252,7 @@ async def main():
                     continue
 
                 initialize_param_state()
-                print("\n動作を開始しました。Ctrl+Cで終了できます。")
+                print("\n動作を開始しました。AIアシスタント側で終了してください。")
 
                 # パラメータ送信とハートビートを並列実行
                 sender = asyncio.create_task(send_parameters_task(websocket))
@@ -279,9 +279,7 @@ async def main():
             await asyncio.sleep(retry_delay_sec)
             retry_delay_sec = min(20, retry_delay_sec * 2)
             continue
-        except KeyboardInterrupt:
-            print("\nプログラムを終了します。")
-            break
+        # KeyboardInterruptの処理を削除
         except Exception as e:
             print(f"予期しないエラーが発生しました: {e}")
             print(f"{retry_delay_sec}秒後に再試行します...")
