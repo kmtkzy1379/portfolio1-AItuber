@@ -23,7 +23,7 @@ PROMPTS_DIR = os.path.join(BASE_DIR, 'prompt')
 # 必須ライブラリ一覧です。
 REQUIRED_LIBRARIES = {
     'pytchat', 'aiohttp', 'sounddevice', 'soundfile',
-    'numpy', 'google.generativeai', 'mss', 'PIL', 
+    'numpy', 'google.generativeai', 'mss', 'PIL',
     'requests', 'dotenv'
 }
 
@@ -32,7 +32,7 @@ def load_settings() -> Dict[str, Any]:
     .envファイルから設定を読み込み、辞書として返します。
     .envファイルが存在しない場合は警告を出し、環境変数やデフォルト値を利用します。
     必要なディレクトリも作成します。
-    
+   
     Returns:
         Dict[str, Any]: 設定値を格納した辞書です。
     """
@@ -42,11 +42,19 @@ def load_settings() -> Dict[str, Any]:
     load_dotenv(dotenv_path=env_path)
 
     os.makedirs(DATA_DIR, exist_ok=True)
+   
+    # 画面認識トリガーワード
+    screen_triggers_str = os.getenv("SCREEN_TRIGGER_PHRASES", "")
+    screen_triggers = [t.strip() for t in screen_triggers_str.split(',') if t.strip()]
 
+    # 終了トリガーワード
+    termination_phrases_str = os.getenv("TERMINATION_PHRASES", "")
+    termination_phrases = [p.strip() for p in termination_phrases_str.split(',') if p.strip()]
+   
     settings = {
         # APIキー
         "GEMINI_API_KEY": os.getenv("GEMINI_API_KEY"),
-        
+       
         # YouTube関連設定
         "YOUTUBE_VIDEO_ID": os.getenv("YOUTUBE_VIDEO_ID"),
         "YOUTUBE_POLLING_INTERVAL": float(os.getenv("YOUTUBE_POLLING_INTERVAL", 5.0)),
@@ -54,28 +62,28 @@ def load_settings() -> Dict[str, Any]:
         # VOICEVOX関連設定
         "VOICEVOX_URL": os.getenv("VOICEVOX_URL", "http://127.0.0.1:50021"),
         "VOICEVOX_SPEAKER_ID": int(os.getenv("VOICEVOX_SPEAKER_ID", 58)),
-        # 音声スケール設定（環境変数で上書き可能です）
         "VOICE_SPEED_SCALE": float(os.getenv("VOICE_SPEED_SCALE", 1.0)),
         "VOICE_INTONATION_SCALE": float(os.getenv("VOICE_INTONATION_SCALE", 1.0)),
-        
+       
         # ファイルパス
         "LOG_FILE_PATH": os.path.join(DATA_DIR, "conversation_log.json"),
         "MEMORY_FILE_PATH": os.path.join(DATA_DIR, "ai_memory.json"),
         "FEEDBACK_LOG_FILE_PATH": os.path.join(DATA_DIR, "ai_feedback_log.json"),
-        
+       
         # プロンプトファイルパス
         "SYSTEM_PROMPT_PATH": os.path.join(PROMPTS_DIR, "system_prompt.txt"),
         "FEEDBACK_PROMPT_PATH": os.path.join(PROMPTS_DIR, "self_feedback_prompt.txt"),
         "MEMORY_EXTRACTION_PROMPT_PATH": os.path.join(PROMPTS_DIR, "memory_extraction_prompt.txt"),
-        
-        # AIの挙動設定
+       
+        # ★★★ ここからが修正箇所 ★★★
         "MEMORY_LIMIT": int(os.getenv("MEMORY_LIMIT", 100)),
-        "SCREEN_TRIGGER_PHRASES": [
-            "画面認識機能のチェックをしてください"
-        ],
-        "TERMINATION_PHRASES": [
-            "さようなら", "バイバイ", "終了", "終わり", "またね"
-        ],
+       
+        # 上で作成したリストを正しくキーに割り当てます
+        "SCREEN_TRIGGER_PHRASES": screen_triggers,
+        "TERMINATION_PHRASES": termination_phrases,
+       
+        # .envに要素が多いと見づらい
+        # そのためあまり変更しないFALLBACK_RESPONSESはここで設定します
         "FALLBACK_RESPONSES": [
             "えっと、なんて言おうかな…？",
             "うーん、考え中です…！",
@@ -90,10 +98,10 @@ def load_settings() -> Dict[str, Any]:
 def is_voicevox_connected(url: str) -> bool:
     """
     VOICEVOXエンジンが指定されたURLで起動しているかを確認します。
-    
+   
     Args:
         url (str): VOICEVOXエンジンのURLです。
-        
+       
     Returns:
         bool: 接続できればTrue、できなければFalseです。
     """
@@ -121,13 +129,13 @@ def check_dependencies(required: Set[str]) -> bool:
             __import__(lib.split('==')[0])
         except ImportError:
             missing.add(lib)
-    
+   
     if missing:
         logger.critical("必須ライブラリが不足しています。pipでインストールしてください。")
         logger.critical(f"不足ライブラリ: {', '.join(missing)}")
         print("\npipで以下のライブラリをインストールしてください:")
         print(f"pip install {' '.join(missing)}")
         return False
-    
+   
     logger.info("全ての必須ライブラリがインストールされています。")
     return True
