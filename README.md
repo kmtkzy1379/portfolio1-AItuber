@@ -1,4 +1,4 @@
-AItuberは、Google Gemini APIとVOICEVOX音声合成、VTube Studio（Live2D）連携を統合したYouTubeコメント監視型のAIVtuberアプリケーションです。リアルタイムでYouTubeライブコメントを監視し、音声とLive2Dアバターで応答する対話型システムです。このAIシステムは自由エネルギ原理（FEP）を基に設計されており、意識形成理論を取り入れたAIの挙動を観察する実験的アプリケーションです。
+AItuberは、Google Gemini APIとVOICEVOX音声合成、VTube Studio（Live2D）連携を統合したYouTubeコメント監視型のAIVtuberアプリケーションです。リアルタイムでYouTubeライブコメントを監視し、音声とLive2Dアバターで応答する対話型AI配信者です。このAIシステムは自由エネルギ原理（FEP）を基に設計されており、意識形成理論を取り入れたAIの挙動を観察する実験的アプリケーションです。
 
 ## ✨ 主な機能
 
@@ -38,7 +38,6 @@ prompt/
 - Python 3.9 以降
 - VOICEVOX エンジン
 - Google Gemini APIキー
-- YouTube API（pytchat使用）
 - **VTube Studio（Live2Dモデルを動かす場合）**
 
 ## 🚀 セットアップ方法
@@ -61,13 +60,7 @@ prompt/
     ```
 
 4. **環境変数の設定**
-    `.env`ファイルを作成し、以下の設定を追加：
-    ```env
-    GEMINI_API_KEY=your_gemini_api_key
-    YOUTUBE_VIDEO_ID=your_youtube_video_id
-    VOICEVOX_URL=http://127.0.0.1:50021
-    VOICEVOX_SPEAKER_ID=58
-    ```
+`.env.example`をコピーして`.env`ファイルを作成し、ご自身の環境に合わせて値を設定してください。
 
 5. **VOICEVOXの起動**
     VOICEVOXエンジンを起動してください。
@@ -75,7 +68,13 @@ prompt/
 6. **VTube Studioの起動とAPI有効化**
     VTube Studioを起動し、WebSocket API（デフォルト: ws://localhost:8001）を有効にしてください。
 
-7. **アプリケーションの実行**  
+7. **プロンプト変更(任意)**
+`prompt/system_prompt.txt`をあなたのイメージするキャラの設定してください。
+**おすすめの変更、注意点**
+- <AI>と記述されている部分をキャラ名に変更してください。
+- <**■ 第2部: <AI>の設定**>の部分を変更してください。(設定が多すぎるとFEPと性能が落ちる可能性があります)
+
+8. **アプリケーションの実行**  
       ```bash
       python app/app.py
       ```
@@ -83,19 +82,26 @@ prompt/
 ## 🔧 技術スタック
 
 - **AI**: Google Gemini API
+会話応答の生成、画面キャプチャの画像分析、そして対話からの記憶抽出、FEPに基づいたフィードバッグといった、AIの思考の中核を担います。
 - **音声合成**: VOICEVOX
+AIが生成したテキストを、自然な音声に変換します。
 - **YouTube監視**: pytchat
+YouTube Liveのコメントをリアルタイムで取得し、視聴者のコメントをAIに読み込ませます。
 - **非同期処理**: asyncio, aiohttp
+複数の処理を同時に、かつ効率的に実行するための基盤技術です。よりスムーズな応答によりユーザーの体験を向上させます。
 - **画面キャプチャ**: mss
+AIがPC画面の状況を「見る」ために、スクリーンショットを撮影しAIに読み込ませます。
 - **音声再生**: sounddevice, soundfile
+VOICEVOXから受け取った音声データを実際にスピーカーから再生する役割を担います。
 - **Live2D連携**: VTube Studio WebSocket API, websockets
+Live2Dモデルに自動で自然な動きをさせるため、VTube Studioとリアルタイム通信を行います。
 
 ## 📝 使用方法
 
-1. YouTubeライブストリームの動画IDを設定
+1. YouTubeライブストリームの動画IDを`.env`ファイルに設定
 2. アプリケーションを起動
 3. YouTubeライブコメントが投稿されると自動的にAIが応答
-4. 「画面を見て」などのトリガーフレーズで画面分析機能を実行
+4. トリガーフレーズで画面分析機能を実行
 5. VTube StudioでLive2Dモデルを起動しておくと、AIの応答やコメントに合わせてアバターが自動で動作
 
 ## 🤝 貢献
