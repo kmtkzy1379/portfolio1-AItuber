@@ -25,7 +25,7 @@ class AIModel:
 
         Parameters:
             api_key (str): Gemini APIキーです。
-            model_name (str, optional): 使用するモデル名です。
+            model_name (str, optional): 使用するモデル名です。デフォルトはgemini-2.0-flash-liteです。
         """
         try:
             genai.configure(api_key=api_key)
