@@ -19,7 +19,7 @@ PARAMS_TO_RANDOMIZE = {
 }
 
 # --- 瞬き設定 ---
-BLINK_PARAM_NAME = "EyeOpenLeft"  # モデルに合わせて調整
+BLINK_PARAM_NAMES = ["EyeOpenLeft","EyeOpenRight"]  # モデルに合わせて調整
 BLINK_INTERVAL_MIN_SEC = 2.0
 BLINK_INTERVAL_MAX_SEC = 6.0
 BLINK_DURATION_SEC = 0.14       # 閉じ→開きの合計時間
@@ -213,7 +213,8 @@ async def send_parameters_task(websocket):
             param_values_to_inject.append({"id": param_name, "value": state["current"]})
 
         # 瞬きパラメータも追加
-        param_values_to_inject.append({"id": BLINK_PARAM_NAME, "value": blink_state["current_value"]})
+        for param_name in BLINK_PARAM_NAMES: 
+            param_values_to_inject.append({"id": param_name, "value": blink_state["current_value"]})
         data = {"parameterValues": param_values_to_inject}
         await send_request(websocket, "InjectParameterDataRequest", data)
         # 微小なタイミングずれを加えて負荷分散
@@ -289,4 +290,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
