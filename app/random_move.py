@@ -8,7 +8,7 @@ import time
 # --- VTube Studio 設定 ---
 VTS_API_URL = "ws://localhost:8001"
 PLUGIN_NAME = "NaturalBodyMover"
-PLUGIN_DEVELOPER = "YourName"
+PLUGIN_DEVELOPER = "kmtkzy"
 AUTH_TOKEN_FILE = "vts_auth_token.txt"
 
 # ランダム動作パラメータと範囲
@@ -289,3 +289,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
