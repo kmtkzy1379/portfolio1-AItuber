@@ -180,11 +180,6 @@ class AILogic:
             )
             if response.parts:
                 response_text = response.text.replace("**", "").strip()
-                # 長すぎる応答は句読点で切り詰めます
-                if len(response_text) > 150:
-                    last_punc = max(response_text.rfind(p) for p in "。、！？")
-                    response_text = response_text[:last_punc + 1] if last_punc > 100 else response_text[:150] + "…"
-                return response_text
             else:
                 logger.warning(f"Geminiの応答が空またはブロックされました。理由: {response.prompt_feedback}")
                 return random.choice(self.settings.get('FALLBACK_RESPONSES', [""]))
