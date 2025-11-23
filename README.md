@@ -50,7 +50,7 @@ prompt/
 
 2. **仮想環境の作成とアクティベート**
     ```bash
-    python -m venv evenv
+    python -m venv venv
     evenv\Scripts\activate
     ```
 
