@@ -51,7 +51,7 @@ prompt/
 2. **仮想環境の作成とアクティベート**
     ```bash
     python -m venv venv
-    evenv\Scripts\activate
+    venv\Scripts\activate
     ```
 
 3. **依存関係のインストール**
